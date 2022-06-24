@@ -12,12 +12,21 @@ import java.util.List;
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
 
-    @Query("SELECT NEW com.cg.model.CustomerDTO (c.id, c.firstName, c.lastName) FROM Customer c")
+    @Query("SELECT NEW com.cg.model.CustomerDTO (" +
+                "c.id, " +
+                "c.fullName, " +
+                "c.email, " +
+                "c.phone, " +
+                "c.province.id, " +
+                "c.province.name" +
+            ") " +
+            "FROM Customer c"
+    )
     List<CustomerDTO> findAllDTO();
 
     List<Customer> findAllByIsDeletedFalse();
 
-    List<Customer> findAllByFirstNameLike(String firstName);
+    List<Customer> findAllByFullNameLike(String firstName);
 
     Iterable<Customer> findAllBy(Sort s);
 }

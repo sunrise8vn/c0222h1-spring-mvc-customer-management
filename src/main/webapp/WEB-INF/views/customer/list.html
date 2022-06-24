@@ -2,27 +2,44 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>List of customers</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
-<a href="/create-customer">Create new customer</a>
-<h1>Customers</h1>
-<table border="1">
-    <tr>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    <th:block th:each="customer : ${customers}">
-        <tr>
-            <td th:text="${customer.id}"></td>
-            <td th:text="${customer.firstName}"></td>
-            <td th:text="${customer.lastName}"></td>
-            <td><a th:href="@{/edit-customer/__${customer.id}__ }">Edit</a></td>
-            <td><a th:href="@{/delete-customer/__${customer.id}__ }">Delete</a></td>
-        </tr>
-    </th:block>
-</table>
+    <div class="container">
+        <a class="btn btn-outline-primary" href="/create-customer">Create new customer</a>
+        <h1>Customers</h1>
+        <table class="table table-hover table-borderless">
+            <thead class="table-title">
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Province Name</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="item : ${customers}">
+                   <tr>
+                       <td class="text-center" th:text="${item.id}"></td>
+                       <td th:text="${item.fullName}"></td>
+                       <td th:text="${item.email}"></td>
+                       <td th:text="${item.phone}"></td>
+                       <td th:text="${item.provinceName}"></td>
+                       <td class="text-center"><a th:href="@{/edit-customer/__${item.id}__ }">Edit</a></td>
+                       <td class="text-center"><a th:href="@{/delete-customer/__${item.id}__ }">Delete</a></td>
+                   </tr>
+                </th:block>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

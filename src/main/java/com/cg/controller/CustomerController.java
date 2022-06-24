@@ -2,7 +2,9 @@ package com.cg.controller;
 
 import com.cg.model.Customer;
 import com.cg.model.CustomerDTO;
+import com.cg.model.Province;
 import com.cg.service.ICustomerService;
+import com.cg.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,9 @@ public class CustomerController {
     @Autowired
     private ICustomerService customerService;
 
+    @Autowired
+    private ProvinceService provinceService;
+
     @GetMapping("/customers")
     public ModelAndView listCustomers() {
 //        List<Customer> customers = customerService.findAllDeletedFalse();
@@ -35,16 +40,37 @@ public class CustomerController {
     @GetMapping("/create-customer")
     public ModelAndView showCreateForm() {
         ModelAndView modelAndView = new ModelAndView("/customer/create");
-        modelAndView.addObject("customer", new Customer());
+//        modelAndView.addObject("customer", new Customer());
+        modelAndView.addObject("customerDTO", new CustomerDTO());
+
+        List<Province> provinces = provinceService.findAll();
+        modelAndView.addObject("provinces", provinces);
+
         return modelAndView;
     }
 
     @PostMapping("/create-customer")
-    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer) {
+    public ModelAndView saveCustomer(@ModelAttribute("customerDTO") CustomerDTO customerDTO) {
+
+        System.out.println(customerDTO.toString());
+
+        Customer customer = new Customer();
+        customer.setFullName(customerDTO.getFullName());
+        customer.setEmail(customerDTO.getEmail());
+        customer.setPhone(customerDTO.getPhone());
+
+        Province province = provinceService.getById(customerDTO.getProvinceId());
+        customer.setProvince(province);
+
         customerService.save(customer);
+
         ModelAndView modelAndView = new ModelAndView("/customer/create");
-        modelAndView.addObject("customer", new Customer());
+        modelAndView.addObject("customerDTO", new CustomerDTO());
         modelAndView.addObject("message", "New customer created successfully");
+
+        List<Province> provinces = provinceService.findAll();
+        modelAndView.addObject("provinces", provinces);
+
         return modelAndView;
     }
 
